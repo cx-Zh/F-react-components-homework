@@ -27,13 +27,37 @@ class Chat extends Component {
     }, 1000);
   }
 
+  setMessage = (message) => {
+    // eslint-disable-next-line react/no-access-state-in-setstate
+    const temp = this.state.messages;
+    temp.push({ text: message, role: 'CUSTOMER', tags: [''] });
+
+    answersData.map((data) => {
+      // data.tags.map(tag => {
+      //   if(message.indexOf(tag)!== -1){
+      //     temp.push(data);
+      //     console.log(tag);
+      //   }
+      //   return tag;
+      // })
+      for (let i = 0; i < data.tags.length; i += 1) {
+        if (message.indexOf(data.tags[i]) !== -1) {
+          temp.push(data);
+          break;
+        }
+      }
+      return data;
+    });
+    this.setState({ messages: temp });
+  };
+
   render() {
     const { shop, messages } = this.state;
     return (
       <main className="Chat">
         <ChatHeader shop={shop} />
         <ChatBox messages={messages} />
-        <ChatInput />
+        <ChatInput onInputChanged={this.setMessage} />
       </main>
     );
   }
